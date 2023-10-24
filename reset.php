@@ -1,90 +1,93 @@
 <?php
-	use PHPMailer\PHPMailer\PHPMailer;
-	use PHPMailer\PHPMailer\Exception;
 
-	include 'includes/session.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-	if(isset($_POST['reset'])){
-		$email = $_POST['email'];
+require_once 'includes/session.php';
 
-		$conn = $pdo->open();
+if (isset($_POST['reset'])) {
+	$email = $_POST['email'];
 
-		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM users WHERE email=:email");
-		$stmt->execute(['email'=>$email]);
-		$row = $stmt->fetch();
+	$conn = $pdo->open();
 
-		if($row['numrows'] > 0){
-			//generate code
-			$set='123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			$code=substr(str_shuffle($set), 0, 15);
-			try{
-				$stmt = $conn->prepare("UPDATE users SET reset_code=:code WHERE id=:id");
-				$stmt->execute(['code'=>$code, 'id'=>$row['id']]);
+	$sql = "SELECT *, COUNT(*) AS numrows FROM users WHERE email = :email"; 
+	$stmt = $conn->prepare($sql);
+	$stmt->execute(['email'=>$email]);
+	$row = $stmt->fetch();
+
+	if ($row['numrows'] > 0) {
+		//Gerar código
+		$set = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$code = substr(str_shuffle($set), 0, 15);
+
+		try {
+			$sql = "UPDATE users SET reset_code = :code WHERE id = :id";
+			$stmt = $conn->prepare($sql);
+			$stmt->execute(['code' => $code, 'id' => $row['id']]);
+			
+			$message = "
+				<h2>Redifinição de Senha</h2>
+				<p>Sua conta:</p>
+				<p>Email: ".$email."</p>
+				<p>Clique no link abaixo para redefinir a sua senha.</p>
+				<a href='http://localhost/techshop/password_reset.php?code=".$code."&user=".$row['id']."'>Redefinir senha</a>
+			";
+
+			//Carregando phpmailer
+			require 'vendor/autoload.php';
+
+			$mail = new PHPMailer(true);
+
+			try {
+				//Configurações do server
+				$mail->isSMTP();                                     
+				$mail->Host = 'smtp.gmail.com';                      
+				$mail->SMTPAuth = true;                               
+				$mail->Username = '';     
+				$mail->Password = '';                    
+				$mail->SMTPOptions = [
+					'ssl' => [
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true
+					]
+				];
+
+				$mail->SMTPSecure = 'ssl';                           
+				$mail->Port = 465;                                   
+
+				$mail->setFrom('testsourcecodester@gmail.com');
 				
-				$message = "
-					<h2>Password Reset</h2>
-					<p>Your Account:</p>
-					<p>Email: ".$email."</p>
-					<p>Please click the link below to reset your password.</p>
-					<a href='http://localhost/ecommerce/password_reset.php?code=".$code."&user=".$row['id']."'>Reset Password</a>
-				";
+				//Destinatários
+				$mail->addAddress($email);              
+				$mail->addReplyTo('testsourcecodester@gmail.com');
+				
+				//Conteudo
+				$mail->isHTML(true);                                  
+				$mail->Subject = 'Techshop e-commerce. Resetar senha!';
+				$mail->Body    = $message;
 
-				//Load phpmailer
-	    		require 'vendor/autoload.php';
+				$mail->send();
 
-	    		$mail = new PHPMailer(true);                             
-			    try {
-			        //Server settings
-			        $mail->isSMTP();                                     
-			        $mail->Host = 'smtp.gmail.com';                      
-			        $mail->SMTPAuth = true;                               
-			        $mail->Username = '';     
-			        $mail->Password = '';                    
-			        $mail->SMTPOptions = array(
-			            'ssl' => array(
-			            'verify_peer' => false,
-			            'verify_peer_name' => false,
-			            'allow_self_signed' => true
-			            )
-			        );                         
-			        $mail->SMTPSecure = 'ssl';                           
-			        $mail->Port = 465;                                   
-
-			        $mail->setFrom('testsourcecodester@gmail.com');
-			        
-			        //Recipients
-			        $mail->addAddress($email);              
-			        $mail->addReplyTo('testsourcecodester@gmail.com');
-			       
-			        //Content
-			        $mail->isHTML(true);                                  
-			        $mail->Subject = 'ECommerce Site Password Reset';
-			        $mail->Body    = $message;
-
-			        $mail->send();
-
-			        $_SESSION['success'] = 'Password reset link sent';
-			     
-			    } 
-			    catch (Exception $e) {
-			        $_SESSION['error'] = 'Message could not be sent. Mailer Error: '.$mail->ErrorInfo;
-			    }
+				$_SESSION['success'] = 'Link de redefinição de senha enviado.';
+				
+			} catch (Exception $e) {
+				$_SESSION['error'] = 'OPS! Não foi possivel enviar a mensagem: '.$mail->ErrorInfo;
 			}
-			catch(PDOException $e){
-				$_SESSION['error'] = $e->getMessage();
-			}
-		}
-		else{
-			$_SESSION['error'] = 'Email not found';
+
+		} catch(PDOException $e) {
+			$_SESSION['error'] = $e->getMessage();
 		}
 
-		$pdo->close();
-
-	}
-	else{
-		$_SESSION['error'] = 'Input email associated with account';
+	} else {
+		$_SESSION['error'] = 'Email não encontrado';
 	}
 
-	header('location: password_forgot.php');
+	$pdo->close();
 
-?>
+} else {
+	$_SESSION['error'] = 'Insira o e-mail associado à conta.';
+}
+
+header('location: password_forgot.php');
+exit();
