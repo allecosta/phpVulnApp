@@ -1,6 +1,6 @@
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>All rights reserved</b>
+      <strong>Todos os direitos reservados</b>
     </div>
-    <strong>Copyright &copy; 2018 <a href="https://www.sourcecodester.com/">SourceCodeSter</a></strong>
+    <strong>&copy; 2023 <a href="">e-Maker Web</a></strong>
 </footer>
