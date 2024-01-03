@@ -1,20 +1,20 @@
 <?php
-	include 'includes/session.php';
 
-	$output = '';
+require 'includes/session.php';
 
-	$conn = $pdo->open();
+$output = '';
 
-	$stmt = $conn->prepare("SELECT * FROM category");
-	$stmt->execute();
+$conn = $pdo->open();
 
-	foreach($stmt as $row){
-		$output .= "
-			<option value='".$row['id']."' class='append_items'>".$row['name']."</option>
-		";
-	}
+$stmt = $conn->prepare("SELECT * FROM category");
+$stmt->execute();
 
-	$pdo->close();
-	echo json_encode($output);
+foreach ($stmt as $row) {
+	$output .= "
+		<option value='" . $row['id'] . "' class='append_items'>" . $row['name'] . "</option>
+	";
+}
 
-?>
+$pdo->close();
+
+echo json_encode($output);
