@@ -1,27 +1,25 @@
 <?php
-	include 'includes/session.php';
 
-	if(isset($_POST['delete'])){
-		$id = $_POST['id'];
-		
-		$conn = $pdo->open();
+require 'includes/session.php';
 
-		try{
-			$stmt = $conn->prepare("DELETE FROM users WHERE id=:id");
-			$stmt->execute(['id'=>$id]);
+if (isset($_POST['delete'])) {
+	$id = $_POST['id'];
 
-			$_SESSION['success'] = 'User deleted successfully';
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
+	$conn = $pdo->open();
 
-		$pdo->close();
-	}
-	else{
-		$_SESSION['error'] = 'Select user to delete first';
+	try {
+		$sql = "DELETE FROM users WHERE id = :id";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(['id' => $id]);
+
+		$_SESSION['success'] = 'Usuário excluído com sucesso.';
+	} catch (PDOException $e) {
+		$_SESSION['error'] = $e->getMessage();
 	}
 
-	header('location: users.php');
-	
-?>
+	$pdo->close();
+} else {
+	$_SESSION['error'] = 'Favor, primeiro selecionar o usuário a ser excluído.';
+}
+
+header('location: users.php');

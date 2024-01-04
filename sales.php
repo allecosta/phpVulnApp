@@ -1,45 +1,55 @@
 <?php
-	include 'includes/session.php';
 
-	if(isset($_GET['pay'])){
-		$payid = $_GET['pay'];
-		$date = date('Y-m-d');
+require_once 'includes/session.php';
 
-		$conn = $pdo->open();
+if (isset($_GET['pay'])) {
+	$payid = $_GET['pay'];
+	$date = date('Y-m-d');
 
-		try{
-			
-			$stmt = $conn->prepare("INSERT INTO sales (user_id, pay_id, sales_date) VALUES (:user_id, :pay_id, :sales_date)");
-			$stmt->execute(['user_id'=>$user['id'], 'pay_id'=>$payid, 'sales_date'=>$date]);
-			$salesid = $conn->lastInsertId();
-			
-			try{
-				$stmt = $conn->prepare("SELECT * FROM cart LEFT JOIN products ON products.id=cart.product_id WHERE user_id=:user_id");
-				$stmt->execute(['user_id'=>$user['id']]);
+	$conn = $pdo->open();
 
-				foreach($stmt as $row){
-					$stmt = $conn->prepare("INSERT INTO details (sales_id, product_id, quantity) VALUES (:sales_id, :product_id, :quantity)");
-					$stmt->execute(['sales_id'=>$salesid, 'product_id'=>$row['product_id'], 'quantity'=>$row['quantity']]);
-				}
+	try {
+		$sql = "INSERT INTO sales (user_id, pay_id, sales_date) VALUES (:user_id, :pay_id, :sales_date)";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute([
+						'user_id' => $user['id'], 
+						'pay_id' => $payid, 
+						'sales_date' => $date
+					]);
 
-				$stmt = $conn->prepare("DELETE FROM cart WHERE user_id=:user_id");
-				$stmt->execute(['user_id'=>$user['id']]);
+		$salesid = $conn->lastInsertId();
+		
+		try {
+			$sql = "SELECT * FROM cart LEFT JOIN products ON products.id = cart.product_id WHERE user_id = :user_id";
+			$stmt = $conn->prepare($sql);
+			$stmt->execute(['user_id'=>$user['id']]);
 
-				$_SESSION['success'] = 'Transaction successful. Thank you.';
-
+			foreach($stmt as $row) {
+				$sql = "INSERT INTO details (sales_id, product_id, quantity) VALUES (:sales_id, :product_id, :quantity)";
+				$stmt = $conn->prepare($sql);
+				$stmt->execute(['
+								sales_id' => $salesid, 
+								'product_id' => $row['product_id'], 
+								'quantity' => $row['quantity']
+							]);
 			}
-			catch(PDOException $e){
-				$_SESSION['error'] = $e->getMessage();
-			}
 
-		}
-		catch(PDOException $e){
+			$sql = "DELETE FROM cart WHERE user_id = :user_id";
+			$stmt = $conn->prepare($sql);
+			$stmt->execute(['user_id' => $user['id']]);
+
+			$_SESSION['success'] = 'Transação bem sucedida! Obrigado(a).';
+
+		} catch(PDOException $e) {
 			$_SESSION['error'] = $e->getMessage();
 		}
 
-		$pdo->close();
+	} catch(PDOException $e) {
+		$_SESSION['error'] = $e->getMessage();
 	}
-	
-	header('location: profile.php');
-	
-?>
+
+	$pdo->close();
+}
+
+header('location: profile.php');
+exit();

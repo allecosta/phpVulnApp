@@ -1,44 +1,56 @@
 <?php
-	include 'includes/session.php';
 
-	if(isset($_POST['edit'])){
-		$id = $_POST['id'];
-		$firstname = $_POST['firstname'];
-		$lastname = $_POST['lastname'];
-		$email = $_POST['email'];
-		$password = $_POST['password'];
-		$address = $_POST['address'];
-		$contact = $_POST['contact'];
+require 'includes/session.php';
 
-		$conn = $pdo->open();
-		$stmt = $conn->prepare("SELECT * FROM users WHERE id=:id");
-		$stmt->execute(['id'=>$id]);
-		$row = $stmt->fetch();
+if (isset($_POST['edit'])) {
+	$id = $_POST['id'];
+	$firstname = $_POST['firstname'];
+	$lastname = $_POST['lastname'];
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+	$address = $_POST['address'];
+	$contact = $_POST['contact'];
 
-		if($password == $row['password']){
-			$password = $row['password'];
-		}
-		else{
-			$password = password_hash($password, PASSWORD_DEFAULT);
-		}
+	$conn = $pdo->open();
 
-		try{
-			$stmt = $conn->prepare("UPDATE users SET email=:email, password=:password, firstname=:firstname, lastname=:lastname, address=:address, contact_info=:contact WHERE id=:id");
-			$stmt->execute(['email'=>$email, 'password'=>$password, 'firstname'=>$firstname, 'lastname'=>$lastname, 'address'=>$address, 'contact'=>$contact, 'id'=>$id]);
-			$_SESSION['success'] = 'User updated successfully';
+	$sql = "SELECT * FROM users WHERE id = :id";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute(['id' => $id]);
+	$row = $stmt->fetch();
 
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
-		
-
-		$pdo->close();
-	}
-	else{
-		$_SESSION['error'] = 'Fill up edit user form first';
+	if ($password == $row['password']) {
+		$password = $row['password'];
+	} else {
+		$password = password_hash($password, PASSWORD_DEFAULT);
 	}
 
-	header('location: users.php');
+	try {
+		$sql = "UPDATE 
+					users 
+				SET 
+					email = :email, password = :password, firstname = :firstname, lastname = :lastname, address = :address, contact_info = :contact 
+				WHERE 
+					id = :id";
 
-?>
+		$stmt = $conn->prepare($sql);
+		$stmt->execute([
+			'email' => $email,
+			'password' => $password,
+			'firstname' => $firstname,
+			'lastname' => $lastname,
+			'address' => $address,
+			'contact' => $contact,
+			'id' => $id
+		]);
+
+		$_SESSION['success'] = 'Usuário atualizado com sucesso.';
+	} catch (PDOException $e) {
+		$_SESSION['error'] = $e->getMessage();
+	}
+
+	$pdo->close();
+} else {
+	$_SESSION['error'] = 'Favor, primeiro preencher o formulário de edição do usuário.';
+}
+
+header('location: users.php');
