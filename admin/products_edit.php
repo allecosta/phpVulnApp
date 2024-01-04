@@ -1,32 +1,36 @@
 <?php
-	include 'includes/session.php';
-	include 'includes/slugify.php';
 
-	if(isset($_POST['edit'])){
-		$id = $_POST['id'];
-		$name = $_POST['name'];
-		$slug = slugify($name);
-		$category = $_POST['category'];
-		$price = $_POST['price'];
-		$description = $_POST['description'];
+require 'includes/session.php';
+require 'includes/slugify.php';
 
-		$conn = $pdo->open();
+if (isset($_POST['edit'])) {
+	$id = $_POST['id'];
+	$name = $_POST['name'];
+	$slug = slugify($name);
+	$category = $_POST['category'];
+	$price = $_POST['price'];
+	$description = $_POST['description'];
 
-		try{
-			$stmt = $conn->prepare("UPDATE products SET name=:name, slug=:slug, category_id=:category, price=:price, description=:description WHERE id=:id");
-			$stmt->execute(['name'=>$name, 'slug'=>$slug, 'category'=>$category, 'price'=>$price, 'description'=>$description, 'id'=>$id]);
-			$_SESSION['success'] = 'Product updated successfully';
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
-		
-		$pdo->close();
+	$conn = $pdo->open();
+
+	try {
+		$sql = "UPDATE 
+					products 
+				SET 
+					name = :name, slug = :slug, category_id = :category, price = :price, description = :description 
+				WHERE 
+					id = :id";
+
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(['name' => $name, 'slug' => $slug, 'category' => $category, 'price' => $price, 'description' => $description, 'id' => $id]);
+		$_SESSION['success'] = 'Produto atualizado com sucesso';
+	} catch (PDOException $e) {
+		$_SESSION['error'] = $e->getMessage();
 	}
-	else{
-		$_SESSION['error'] = 'Fill up edit product form first';
-	}
 
-	header('location: products.php');
+	$pdo->close();
+} else {
+	$_SESSION['error'] = 'Favor primeiro preencher o formulário de edição de produto.';
+}
 
-?>
+header('location: products.php');

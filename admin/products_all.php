@@ -1,19 +1,21 @@
 <?php
-	include 'includes/session.php';
 
-	$output = '';
+require 'includes/session.php';
 
-	$conn = $pdo->open();
+$output = '';
 
-	$stmt = $conn->prepare("SELECT * FROM products");
-	$stmt->execute();
-	foreach($stmt as $row){
-		$output .= "
-			<option value='".$row['id']."' class='append_items'>".$row['name']."</option>
-		";
-	}
+$conn = $pdo->open();
 
-	$pdo->close();
-	echo json_encode($output);
+$sql = "SELECT * FROM products";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
 
-?>
+foreach ($stmt as $row) {
+	$output .= "
+		<option value='" . $row['id'] . "' class='append_items'>" . $row['name'] . "</option>
+	";
+}
+
+$pdo->close();
+
+echo json_encode($output);
