@@ -10,9 +10,9 @@ if (isset($_POST['reset'])) {
 
 	$conn = $pdo->open();
 
-	$sql = "SELECT *, COUNT(*) AS numrows FROM users WHERE email = :email"; 
+	$sql = "SELECT *, COUNT(*) AS numrows FROM users WHERE email = :email";
 	$stmt = $conn->prepare($sql);
-	$stmt->execute(['email'=>$email]);
+	$stmt->execute(['email' => $email]);
 	$row = $stmt->fetch();
 
 	if ($row['numrows'] > 0) {
@@ -24,13 +24,13 @@ if (isset($_POST['reset'])) {
 			$sql = "UPDATE users SET reset_code = :code WHERE id = :id";
 			$stmt = $conn->prepare($sql);
 			$stmt->execute(['code' => $code, 'id' => $row['id']]);
-			
+
 			$message = "
 				<h2>Redifinição de Senha</h2>
 				<p>Sua conta:</p>
-				<p>Email: ".$email."</p>
+				<p>Email: " . $email . "</p>
 				<p>Clique no link abaixo para redefinir a sua senha.</p>
-				<a href='http://localhost/techshop/password_reset.php?code=".$code."&user=".$row['id']."'>Redefinir senha</a>
+				<a href='http://localhost/techshop/password_reset.php?code=" . $code . "&user=" . $row['id'] . "'>Redefinir senha</a>
 			";
 
 			//Carregando phpmailer
@@ -40,51 +40,47 @@ if (isset($_POST['reset'])) {
 
 			try {
 				//Configurações do server
-				$mail->isSMTP();                                     
-				$mail->Host = 'smtp.gmail.com';                      
-				$mail->SMTPAuth = true;                               
-				$mail->Username = '';     
-				$mail->Password = '';                    
+				$mail->isSMTP();
+				$mail->Host = 'smtp.gmail.com';
+				$mail->SMTPAuth = true;
+				$mail->Username = '';
+				$mail->Password = '';
 				$mail->SMTPOptions = [
 					'ssl' => [
-					'verify_peer' => false,
-					'verify_peer_name' => false,
-					'allow_self_signed' => true
+						'verify_peer' => false,
+						'verify_peer_name' => false,
+						'allow_self_signed' => true
 					]
 				];
 
-				$mail->SMTPSecure = 'ssl';                           
-				$mail->Port = 465;                                   
+				$mail->SMTPSecure = 'ssl';
+				$mail->Port = 465;
 
-				$mail->setFrom('testsourcecodester@gmail.com');
-				
+				$mail->setFrom('alesantos1028@gmail.com');
+
 				//Destinatários
-				$mail->addAddress($email);              
-				$mail->addReplyTo('testsourcecodester@gmail.com');
-				
+				$mail->addAddress($email);
+				$mail->addReplyTo('alesantos1028@gmail.com');
+
 				//Conteudo
-				$mail->isHTML(true);                                  
-				$mail->Subject = 'Techshop e-commerce. Resetar senha!';
+				$mail->isHTML(true);
+				$mail->Subject = 'TechShop - Resetar senha!';
 				$mail->Body    = $message;
 
 				$mail->send();
 
 				$_SESSION['success'] = 'Link de redefinição de senha enviado.';
-				
 			} catch (Exception $e) {
-				$_SESSION['error'] = 'OPS! Não foi possivel enviar a mensagem: '.$mail->ErrorInfo;
+				$_SESSION['error'] = 'OPS! Não foi possivel enviar a mensagem: ' . $mail->ErrorInfo;
 			}
-
-		} catch(PDOException $e) {
+		} catch (PDOException $e) {
 			$_SESSION['error'] = $e->getMessage();
 		}
-
 	} else {
 		$_SESSION['error'] = 'Email não encontrado';
 	}
 
 	$pdo->close();
-
 } else {
 	$_SESSION['error'] = 'Insira o e-mail associado à conta.';
 }
