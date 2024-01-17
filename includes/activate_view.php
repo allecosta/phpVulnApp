@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Arquivo inserido em activate.php
+ * 
+ */
+
+require 'includes/session.php';
+
 $output = '';
 
 if (!isset($_GET['code']) or !isset($_GET['user'])) {
@@ -66,3 +73,5 @@ if (!isset($_GET['code']) or !isset($_GET['user'])) {
 
 	$pdo->close();
 }
+
+require_once 'includes/header.php';
