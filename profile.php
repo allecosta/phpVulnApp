@@ -1,21 +1,10 @@
-<?php 
-
-require_once 'includes/session.php';
-
-if (!isset($_SESSION['user'])) {
-	header('location: index.php');
-	exit();
-}
-
-require 'includes/header.php'; 
-
-?>
+<?php require 'includes/profile_view.php'; ?>
 
 <body class="hold-transition skin-blue layout-top-nav">
 	<div class="wrapper">
 
-		<?php require 'includes/navbar.php'; ?>
-		
+		<?php require_once 'includes/navbar.php'; ?>
+
 		<div class="content-wrapper">
 			<div class="container">
 				<section class="content">
@@ -26,7 +15,7 @@ require 'includes/header.php';
 							if (isset($_SESSION['error'])) {
 								echo "
 									<div class='callout callout-danger'>
-										".$_SESSION['error']."
+										" . $_SESSION['error'] . "
 									</div>
 								";
 
@@ -36,7 +25,7 @@ require 'includes/header.php';
 							if (isset($_SESSION['success'])) {
 								echo "
 									<div class='callout callout-success'>
-										".$_SESSION['success']."
+										" . $_SESSION['success'] . "
 									</div>
 								";
 
@@ -48,7 +37,7 @@ require 'includes/header.php';
 							<div class="box box-solid">
 								<div class="box-body">
 									<div class="col-sm-3">
-										<img src="<?= (!empty($user['photo'])) ? 'images/'.$user['photo'] : 'images/profile.jpg'; ?>" width="100%">
+										<img src="<?= (!empty($user['photo'])) ? 'images/' . $user['photo'] : 'images/profile.jpg'; ?>" width="100%">
 									</div>
 									<div class="col-sm-9">
 										<div class="row">
@@ -60,12 +49,9 @@ require 'includes/header.php';
 												<h4>Membro Desde:</h4>
 											</div>
 											<div class="col-sm-9">
-												<h4><?= $user['firstname'].' '.$user['lastname']; ?>
+												<h4><?= $user['firstname'] . ' ' . $user['lastname']; ?>
 													<span class="pull-right">
-														<a 
-															href="#edit" 
-															class="btn btn-success btn-flat btn-sm" 
-															data-toggle="modal">
+														<a href="#edit" class="btn btn-success btn-flat btn-sm" data-toggle="modal">
 															<i class="fa fa-edit"></i> Editar
 														</a>
 													</span>
@@ -102,13 +88,13 @@ require 'includes/header.php';
 												$stmt = $conn->prepare($sql);
 												$stmt->execute(['user_id' => $user['id']]);
 
-												foreach($stmt as $row) {
+												foreach ($stmt as $row) {
 													$sql = "SELECT * FROM details LEFT JOIN products ON products.id=details.product_id WHERE sales_id=:id";
 													$stmt2 = $conn->prepare($sql);
 													$stmt2->execute(['id' => $row['id']]);
 													$total = 0;
 
-													foreach($stmt2 as $row2) {
+													foreach ($stmt2 as $row2) {
 														$subtotal = $row2['price'] * $row2['quantity'];
 														$total += $subtotal;
 													}
@@ -116,15 +102,14 @@ require 'includes/header.php';
 													echo "
 														<tr>
 															<td class='hidden'></td>
-															<td>".date('M d, Y', strtotime($row['sales_date']))."</td>
-															<td>".$row['pay_id']."</td>
-															<td>&#36; ".number_format($total, 2)."</td>
-															<td><button class='btn btn-sm btn-flat btn-info transact' data-id='".$row['id']."'><i class='fa fa-search'></i> Visualizar</button></td>
+															<td>" . date('M d, Y', strtotime($row['sales_date'])) . "</td>
+															<td>" . $row['pay_id'] . "</td>
+															<td>&#36; " . number_format($total, 2) . "</td>
+															<td><button class='btn btn-sm btn-flat btn-info transact' data-id='" . $row['id'] . "'><i class='fa fa-search'></i> Visualizar</button></td>
 														</tr>
 													";
 												}
-
-											} catch(PDOException $e) {
+											} catch (PDOException $e) {
 												echo "OPS! Há algum problema de conexão: " . $e->getMessage();
 											}
 
@@ -143,16 +128,16 @@ require 'includes/header.php';
 				</section>
 			</div>
 		</div>
-	
+
 		<?php
 
-		require 'includes/footer.php';
-		require 'includes/profile_modal.php'; 
-		
+		require_once 'includes/footer.php';
+		require 'includes/profile_modal.php';
+
 		?>
 	</div>
 
-	<?php require_once 'includes/scripts.php'; ?>
+	<?php require 'includes/scripts.php'; ?>
 
 	<script>
 		$(function() {
@@ -163,9 +148,11 @@ require 'includes/header.php';
 				$.ajax({
 					type: 'POST',
 					url: 'transaction.php',
-					data: {id:id},
+					data: {
+						id: id
+					},
 					dataType: 'json',
-					success:function(response) {
+					success: function(response) {
 						$('#date').html(response.date);
 						$('#transid').html(response.transaction);
 						$('#detail').prepend(response.list);
@@ -174,10 +161,11 @@ require 'includes/header.php';
 				});
 			});
 
-			$("#transaction").on("hidden.bs.modal", function () {
+			$("#transaction").on("hidden.bs.modal", function() {
 				$('.prepend_items').remove();
 			});
 		});
 	</script>
 </body>
+
 </html>
