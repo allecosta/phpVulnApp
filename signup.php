@@ -1,23 +1,4 @@
-<?php 
-
-require_once 'includes/session.php'; 
-
-if (isset($_SESSION['user'])) {
-  header('location: cart_view.php');
-  exit();
-}
-
-if (isset($_SESSION['captcha'])) {
-  $now = time();
-
-  if ($now >= $_SESSION['captcha']) {
-    unset($_SESSION['captcha']);
-  }
-}
-
-require 'includes/header.php'; 
-
-?>
+<?php require 'includes/signup_view.php'; ?>
 
 <body class="hold-transition register-page">
     <div class="register-box">
@@ -26,7 +7,7 @@ require 'includes/header.php';
         if (isset($_SESSION['error'])) {
             echo "
             <div class='callout callout-danger text-center'>
-                <p>".$_SESSION['error']."</p> 
+                <p>" . $_SESSION['error'] . "</p> 
             </div>
             ";
 
@@ -36,7 +17,7 @@ require 'includes/header.php';
         if (isset($_SESSION['success'])) {
             echo "
             <div class='callout callout-success text-center'>
-                <p>".$_SESSION['success']."</p> 
+                <p>" . $_SESSION['success'] . "</p> 
             </div>
             ";
 
@@ -53,13 +34,13 @@ require 'includes/header.php';
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" name="lastname" placeholder="Sobrenome" value="<?= (isset($_SESSION['lastname'])) ? $_SESSION['lastname'] : '' ?>"  required>
+                    <input type="text" class="form-control" name="lastname" placeholder="Sobrenome" value="<?= (isset($_SESSION['lastname'])) ? $_SESSION['lastname'] : '' ?>" required>
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
-                    <div class="form-group has-feedback">
-                        <input type="email" class="form-control" name="email" placeholder="Email" value="<?= (isset($_SESSION['email'])) ? $_SESSION['email'] : '' ?>" autocomplete="off" required>
-                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                    </div>
+                <div class="form-group has-feedback">
+                    <input type="email" class="form-control" name="email" placeholder="Email" value="<?= (isset($_SESSION['email'])) ? $_SESSION['email'] : '' ?>" autocomplete="off" required>
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
                 <div class="form-group has-feedback">
                     <input type="password" class="form-control" name="password" placeholder="Senha" required>
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
@@ -79,7 +60,8 @@ require 'includes/header.php';
                     ';
                 }
 
-                ?><hr>
+                ?>
+                <hr>
 
                 <div class="row">
                     <div class="col-xs-4">
@@ -91,8 +73,9 @@ require 'includes/header.php';
             <a href="index.php"><i class="fa fa-home"></i> Loja</a>
         </div>
     </div>
-	
-    <?php require_once 'includes/scripts.php' ?>
-    
+
+    <?php require 'includes/scripts.php' ?>
+
 </body>
+
 </html>
