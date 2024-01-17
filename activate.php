@@ -1,10 +1,4 @@
-<?php
-
-require_once 'includes/session.php';
-require_once 'includes/activate_view.php';
-require_once 'includes/header.php';
-
-?>
+<?php require 'includes/activate_view.php'; ?>
 
 <body class="hold-transition skin-blue layout-top-nav">
 	<div class="wrapper">

@@ -1,15 +1,4 @@
-<?php 
-
-require_once 'includes/session.php';
-
-if (isset($_SESSION['user'])) {
-  header('location: cart_view.php');
-  exit();
-}
-
-require 'includes/header.php'; 
-
-?>
+<?php require 'includes/login_view.php'; ?>
 
 <body class="hold-transition login-page">
 	<div class="login-box">
@@ -18,7 +7,7 @@ require 'includes/header.php';
 		if (isset($_SESSION['error'])) {
 			echo "
 			<div class='callout callout-danger text-center'>
-				<p>".$_SESSION['error']."</p> 
+				<p>" . $_SESSION['error'] . "</p> 
 			</div>
 			";
 
@@ -28,7 +17,7 @@ require 'includes/header.php';
 		if (isset($_SESSION['success'])) {
 			echo "
 			<div class='callout callout-success text-center'>
-				<p>".$_SESSION['success']."</p> 
+				<p>" . $_SESSION['success'] . "</p> 
 			</div>
 			";
 
@@ -55,14 +44,15 @@ require 'includes/header.php';
 					</div>
 				</div>
 			</form>
-		<br>
-		<a href="password_forgot.php">Esqueci minha senha</a><br>
-		<a href="signup.php" class="text-center">Registre uma nova conta</a><br>
-		<a href="index.php"><i class="fa fa-home"></i> Loja</a>
+			<br>
+			<a href="password_forgot.php">Esqueci minha senha</a><br>
+			<a href="signup.php" class="text-center">Registre uma nova conta</a><br>
+			<a href="index.php"><i class="fa fa-home"></i> Loja</a>
 		</div>
 	</div>
-	
-	<?php require_once 'includes/scripts.php' ?>
+
+	<?php require 'includes/scripts.php' ?>
 
 </body>
+
 </html>
