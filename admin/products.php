@@ -1,17 +1,4 @@
-<?php
-
-require 'includes/session.php';
-
-//$where = '';
-
-if (isset($_GET['category'])) {
-    $catID = $_GET['category'];
-    //$where = 'WHERE category_id =' . $catID;
-}
-
-require_once 'includes/header.php';
-
-?>
+<?php require 'includes/products_view.php'; ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -156,8 +143,8 @@ require_once 'includes/header.php';
         <?php
 
         require_once 'includes/footer.php';
-        require_once 'includes/products_modal.php';
-        require_once 'includes/products_modal2.php';
+        require 'includes/products_modal.php';
+        require 'includes/products_modal2.php';
 
         ?>
 

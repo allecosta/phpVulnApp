@@ -1,23 +1,4 @@
-<?php
-
-require 'includes/session.php';
-
-if (!isset($_GET['user'])) {
-	header('location: users.php');
-	exit();
-} else {
-	$conn = $pdo->open();
-
-	$stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
-	$stmt->execute(['id' => $_GET['user']]);
-	$user = $stmt->fetch();
-
-	$pdo->close();
-}
-
-require 'includes/header.php';
-
-?>
+<?php require 'includes/cart_view.php'; ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -85,7 +66,17 @@ require 'includes/header.php';
 										$conn = $pdo->open();
 
 										try {
-											$stmt = $conn->prepare("SELECT *, cart.id AS cartid FROM cart LEFT JOIN products ON products.id = cart.product_id WHERE user_id = :user_id");
+											$sql = "SELECT 
+														*, cart.id AS cartid 
+													FROM 
+														cart 
+													LEFT JOIN 
+														products ON products.id = cart.product_id 
+													WHERE 
+														user_id = :user_id
+													";
+
+											$stmt = $conn->prepare($sql);
 											$stmt->execute(['user_id' => $user['id']]);
 
 											foreach ($stmt as $row) {
@@ -119,9 +110,10 @@ require 'includes/header.php';
 		<?php
 
 		require_once 'includes/footer.php';
-		require_once 'includes/cart_modal.php';
+		require 'includes/cart_modal.php';
 
 		?>
+
 	</div>
 
 	<?php require 'includes/scripts.php'; ?>
