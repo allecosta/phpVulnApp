@@ -11,6 +11,7 @@
                     <div class="row">
                         <div class="col-sm-9">
                             <h1 class="page-header"><?= $category['name']; ?></h1>
+
                             <?php
 
                             $conn = $pdo->open();
@@ -26,6 +27,7 @@
                                     $inc = ($inc == 3) ? 1 : $inc + 1;
 
                                     if ($inc == 1) echo "<div class='row'>";
+
                                     echo "
 										<div class='col-sm-4'>
 											<div class='box box-solid'>
@@ -34,7 +36,7 @@
 													<h5><a href='product.php?product=" . $row['slug'] . "'>" . $row['name'] . "</a></h5>
 												</div>
 												<div class='box-footer'>
-													<b>&#36; " . number_format($row['price'], 2) . "</b>
+                                                    <strong>&#82;&#36; " . number_format($row['price'], 2, ',') . "</strong>
 												</div>
 											</div>
 										</div>
