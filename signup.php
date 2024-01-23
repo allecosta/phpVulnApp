@@ -6,9 +6,9 @@
 
         if (isset($_SESSION['error'])) {
             echo "
-            <div class='callout callout-danger text-center'>
-                <p>" . $_SESSION['error'] . "</p> 
-            </div>
+                <div class='callout callout-danger text-center'>
+                    <p>" . $_SESSION['error'] . "</p> 
+                </div>
             ";
 
             unset($_SESSION['error']);
@@ -64,8 +64,8 @@
                 <hr>
 
                 <div class="row">
-                    <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat" name="signup"><i class="fa fa-pencil"></i> Increva-se</button>
+                    <div class="col-xs-5">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat" name="signup"><i class="fa fa-pencil"></i> Inscreva-se</button>
                     </div>
                 </div>
             </form><br>
