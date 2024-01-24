@@ -71,7 +71,7 @@ if (isset($_POST['print'])) {
 
 	$conn = $pdo->open();
 
-	require_once('../tcpdf/tcpdf.php');
+	require '../vendor/tecnickcom/tcpdf/tcpdf.php';
 
 	$pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 	$pdf->SetCreator(PDF_CREATOR);
