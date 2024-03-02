@@ -112,7 +112,7 @@ require_once 'includes/header.php';
         <?php
 
         require_once 'includes/footer.php';
-        require_once '../includes/profile_modal.php';
+        require_once 'includes/sales_modal.php';
 
         ?>
 
