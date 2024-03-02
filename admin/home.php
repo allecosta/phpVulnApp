@@ -62,14 +62,14 @@
                                     $total += $subtotal;
                                 }
 
-                                echo "<h3>&#36; " . numberFormatShort($total, 2) . "</h3>";
+                                echo "<h3>&#82;&#36; " . number_format($total, 2, ',', '.') . "</h3>";
 
                                 ?>
 
                                 <p>Total de Vendas</p>
                             </div>
                             <div class="icon"><i class="fa fa-shopping-cart"></i></div>
-                            <a href="book.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a>
+                            <!-- <a href="book.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a> -->
                         </div>
                     </div>
                     <div class="col-lg-3 col-xs-6">
@@ -89,7 +89,7 @@
                                 <p>Número de Produtos</p>
                             </div>
                             <div class="icon"><i class="fa fa-barcode"></i></div>
-                            <a href="student.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a>
+                            <!-- <a href="student.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a> -->
                         </div>
                     </div>
                     <div class="col-lg-3 col-xs-6">
@@ -109,7 +109,7 @@
                                 <p>Número de Usuários</p>
                             </div>
                             <div class="icon"><i class="fa fa-users"></i></div>
-                            <a href="return.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a>
+                            <!-- <a href="return.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a> -->
                         </div>
                     </div>
                     <div class="col-lg-3 col-xs-6">
@@ -138,14 +138,14 @@
                                     $total += $subtotal;
                                 }
 
-                                echo "<h3>&#36; " . numberFormatShort($total, 2) . "</h3>";
+                                echo "<h3>&#82;&#36; " . number_format($total, 2, ',', '.') . "</h3>";
 
                                 ?>
 
                                 <p>Vendas de Hoje</p>
                             </div>
                             <div class="icon"><i class="fa fa-money"></i></div>
-                            <a href="borrow.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a>
+                            <!-- <a href="borrow.php" class="small-box-footer">Mais informações <i class="fa fa-arrow-circle-right"></i></a> -->
                         </div>
                     </div>
                 </div>

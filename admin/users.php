@@ -30,7 +30,7 @@ require_once 'includes/header.php';
                     echo "
                         <div class='alert alert-danger alert-dismissible'>
                             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                            <h4><i class='icon fa fa-warning'></i> Error!</h4>
+                            <h4><i class='icon fa fa-warning'></i> </h4>
                             " . $_SESSION['error'] . "
                         </div>
                     ";
@@ -42,7 +42,7 @@ require_once 'includes/header.php';
                     echo "
                         <div class='alert alert-success alert-dismissible'>
                             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                            <h4><i class='icon fa fa-check'></i> Sucesso!</h4>
+                            <h4><i class='icon fa fa-check'></i> </h4>
                             " . $_SESSION['success'] . "
                         </div>
                     ";
@@ -66,7 +66,6 @@ require_once 'includes/header.php';
                                         <th>Nome</th>
                                         <th>Status</th>
                                         <th>Adicionado em</th>
-                                        <th>Tools</th>
                                     </thead>
                                     <tbody>
                                         <?php
@@ -95,7 +94,7 @@ require_once 'includes/header.php';
                                                             " . $status . "
                                                             " . $active . "
                                                         </td>
-                                                        <td>" . date('M d, Y', strtotime($row['created_on'])) . "</td>
+                                                        <td>" . date('d M, Y', strtotime($row['created_on'])) . "</td>
                                                         <td>
                                                             <a href='cart.php?user=" . $row['id'] . "' class='btn btn-info btn-sm btn-flat'><i class='fa fa-search'></i> Carrinho</a>
                                                             <button class='btn btn-success btn-sm edit btn-flat' data-id='" . $row['id'] . "'><i class='fa fa-edit'></i> Editar</button>
