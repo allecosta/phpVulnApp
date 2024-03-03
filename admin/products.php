@@ -25,7 +25,7 @@
                     echo "
                         <div class='alert alert-danger alert-dismissible'>
                             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                            <h4><i class='icon fa fa-warning'></i> Error!</h4>
+                            <h4><i class='icon fa fa-warning'></i> </h4>
                             " . $_SESSION['error'] . "
                         </div>
                     ";
@@ -37,7 +37,7 @@
                     echo "
                         <div class='alert alert-success alert-dismissible'>
                             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                            <h4><i class='icon fa fa-check'></i> Sucesso!</h4>
+                            <h4><i class='icon fa fa-check'></i> </h4>
                             " . $_SESSION['success'] . "
                         </div>
                     ";
@@ -88,9 +88,8 @@
                                         <th>Nome</th>
                                         <th>Foto</th>
                                         <th>Descrição</th>
-                                        <th>Priço</th>
-                                        <th>Vizualizações Hoje</th>
-                                        <th>Tools</th>
+                                        <th>Preço</th>
+                                        <th>Vizualizações</th>
                                     </thead>
                                     <tbody>
                                         <?php

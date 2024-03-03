@@ -61,7 +61,6 @@ require_once 'includes/header.php';
                                 <table id="example1" class="table table-bordered">
                                     <thead>
                                         <th>Categoria</th>
-                                        <th>Tools</th>
                                     </thead>
                                     <tbody>
                                         <?php
